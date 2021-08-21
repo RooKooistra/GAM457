@@ -23,28 +23,34 @@ MonoBehaviour:
     - id: 3
       name: KnowPlayersLastPosition
     - id: 4
-      name: KnowFoodLocation
+      name: KnowEnergyLocation
     - id: 5
       name: PlayerAlive
     - id: 6
       name: IsJoinedToHost
+    - id: 7
+      name: IsAtEnergyLocation
   actions:
   - name: SearchForEnergy
-    isDefault: 0
-    state: {fileID: 0}
+    isDefault: 1
+    state: {fileID: 5678515942705521802, guid: 301dc631bbf33e5438db97ec62a1355e, type: 3}
     cost: 0
-    position: {x: 560, y: 60}
+    position: {x: 560, y: 40}
     pre:
     - id: 0
       value: 1
+    - id: 1
+      value: 0
+    - id: 4
+      value: 0
     post:
     - id: 1
       value: 1
-    - id: 0
+    - id: 4
       value: 1
-  - name: ShootPlayer
+  - name: AttackPlayer
     isDefault: 0
-    state: {fileID: 0}
+    state: {fileID: 6158520762062468886, guid: 8663b0916e1eac54281bade831005638, type: 3}
     cost: 0
     position: {x: 960, y: 300}
     pre:
@@ -63,37 +69,37 @@ MonoBehaviour:
       value: 0
     - id: 0
       value: 0
-  - name: SearchForplayer
+  - name: WideSearchForplayer
     isDefault: 0
-    state: {fileID: 0}
+    state: {fileID: 2000963313269017631, guid: cda4cc310e385a6438409372d72169c0, type: 3}
     cost: 0
-    position: {x: 560, y: 300}
+    position: {x: 356.99994, y: 303.17648}
     pre:
     - id: 0
       value: 0
     - id: 2
+      value: 0
+    - id: 3
       value: 0
     post:
     - id: 2
       value: 1
   - name: CollectEnergy
     isDefault: 0
-    state: {fileID: 0}
+    state: {fileID: 5387614140527888800, guid: 1da6b02347280044c87edc7d4cb42714, type: 3}
     cost: 0
-    position: {x: 760, y: 60}
+    position: {x: 960, y: 40}
     pre:
     - id: 0
       value: 1
-    - id: 1
+    - id: 7
       value: 1
     post:
     - id: 0
       value: 0
-    - id: 1
-      value: 0
   - name: ReportPlayer
     isDefault: 0
-    state: {fileID: 0}
+    state: {fileID: 5027474725503073196, guid: 9991c03bcf43cb64683b5a7b235a9fcb, type: 3}
     cost: 0
     position: {x: 760, y: 300}
     pre:
@@ -106,15 +112,47 @@ MonoBehaviour:
     post:
     - id: 6
       value: 1
+  - name: ScoutCloseForPlayer
+    isDefault: 0
+    state: {fileID: 1983354221250362073, guid: ff130741f9d99944986f82cf26ba1ad6, type: 3}
+    cost: 0
+    position: {x: 557.64703, y: 302.64706}
+    pre:
+    - id: 0
+      value: 0
+    - id: 3
+      value: 1
+    - id: 2
+      value: 0
+    post:
+    - id: 2
+      value: 1
+  - name: GoToEnergyLocation
+    isDefault: 0
+    state: {fileID: 8373443025992944389, guid: 4f198bb51b70dd74ea7ff9c3835ba95f, type: 3}
+    cost: 0
+    position: {x: 760, y: 40}
+    pre:
+    - id: 4
+      value: 1
+    - id: 0
+      value: 1
+    - id: 7
+      value: 0
+    post:
+    - id: 1
+      value: 1
+    - id: 7
+      value: 1
   goals:
-  - name: KillPlayer
+  - name: DestroyPlayer
     isDefault: 1
-    position: {x: 1180, y: 300}
+    position: {x: 1160, y: 300}
     conditions:
     - id: 5
       value: 0
   worldStates:
-  - position: {x: 275.29407, y: 641.1765}
+  - position: {x: 248.23529, y: 623.52936}
     isAutoUpdate: 1
     list:
     - id: 0
@@ -130,4 +168,6 @@ MonoBehaviour:
     - id: 5
       value: 1
     - id: 6
+      value: 0
+    - id: 7
       value: 0
