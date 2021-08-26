@@ -1,19 +1,20 @@
+using Anthill.AI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Anthill.AI;
-using Anthill.Utils;
 
-public class SearchForEnergyState : AntAIState
+public class SearchForEnergyState : RooAntAIState
 {
-    NavMeshAgent agent;
-    
-    // testing to see if this works
-    void Start()
-    {
-        agent = GetComponentInParent<NavMeshAgent>();
-        agent.destination = Vector3.zero;
-    }
+
+
+	public override void Execute(float aDeltaTime, float aTimeScale)
+	{
+		base.Execute(aDeltaTime, aTimeScale);
+
+	}
+
 
 }
+
+

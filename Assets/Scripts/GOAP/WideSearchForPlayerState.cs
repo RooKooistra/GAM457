@@ -2,18 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Anthill.AI;
+using UnityEngine.AI;
 
-public class WideSearchForPlayerState : AntAIState
+public class WideSearchForPlayerState : RooAntAIState
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

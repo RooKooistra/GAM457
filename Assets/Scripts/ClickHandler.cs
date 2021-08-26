@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClickHandler : EnemyMovement
+public class ClickHandler : Movement
 {
 
     // Update is called once per frame

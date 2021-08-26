@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(EnemyVision))]
-public class EnemyVisionEditor : Editor
+[CustomEditor(typeof(Vision))]
+public class VisionEditor : Editor
 {
 	private void OnSceneGUI()
 	{
-		EnemyVision vision = (EnemyVision)target;
+		Vision vision = (Vision)target;
 		Handles.color = Color.cyan;
 		Handles.DrawWireArc(vision.eyesightOrigin.transform.position, Vector3.up, Vector3.forward, 360, vision.viewRadius * vision.multilplier);
 

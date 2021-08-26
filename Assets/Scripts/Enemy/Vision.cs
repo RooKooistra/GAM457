@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyVision : EnemyProcessVision
+[RequireComponent(typeof(LogicModel))]
+public class Vision : MonoBehaviour
 {
-    public Transform eyesightOrigin;
+    public Transform eyesightOrigin = null;
     [Header ("Vision distance and angle of view")]
     [Range(0,360)] public float viewAngle = 110f;
     [Range(1, 100)] public float viewRadius = 15f;
@@ -25,36 +26,33 @@ public class EnemyVision : EnemyProcessVision
 
     [Space(5)]
     [Header("Targets in View")]
+
     public List<GameObject> visibleTargets = new List<GameObject>();
 
+    LogicModel logicModel;
 
-    private void Start()
+	private void Awake()
 	{
-        StartCoroutine(FindVisibleTargetsWithDelay(0.3f));
-        StartCoroutine(MonitorPlayers(0.3f));
+        logicModel = GetComponent<LogicModel>(); // was getting a null reference when this was in start
+    }
 
-        EnemyLogic.Alerted += HandleAlerted;
-        EnemyLogic.Calm += HandleCalm;
+	private void Start()
+	{
+        LogicModel.Alerted += HandleAlerted;
+        LogicModel.Calm += HandleCalm;
     }
 
 	private void OnDestroy()
 	{
-        EnemyLogic.Alerted -= HandleAlerted;
-        EnemyLogic.Calm -= HandleCalm;
+        LogicModel.Alerted -= HandleAlerted;
+        LogicModel.Calm -= HandleCalm;
     }
-	IEnumerator FindVisibleTargetsWithDelay(float delay)
-	{
-		while (true)
-		{
-            yield return new WaitForSeconds(delay);
-            FindVisibleTargets();
-		}
-	}
+
 
     /// <summary>
     /// Finds all players inside a view radius and FOV and sends the List to be procesed.
     /// </summary>
-    void FindVisibleTargets()
+    public void FindVisibleTargets()
 	{
         visibleTargets.Clear();
         Collider[] targetsInViewRadius = Physics.OverlapSphere(eyesightOrigin.transform.position, viewRadius * multilplier, targetMask);
@@ -69,12 +67,12 @@ public class EnemyVision : EnemyProcessVision
                 float distanceToTarget = Vector3.Distance(eyesightOrigin.transform.position, target.transform.position);
 				if (!Physics.Raycast(eyesightOrigin.transform.position, directionToTarget, distanceToTarget, obstacleMask))
 				{
-                    if(target.gameObject.GetComponent<CharacterController>()) visibleTargets.Add(target);
+                    if(target.gameObject.GetComponent<Rigidbody>()) visibleTargets.Add(target);
 				}
 			}
         }
 
-        if (visibleTargets.Count > 0) ProcessVision(visibleTargets, viewRadius * multilplier, detectionStrength, distanceSuspicionMultiplyer, sensitivityToMovement);
+        if (visibleTargets.Count > 0) logicModel.ProcessVision(visibleTargets, viewRadius * multilplier, detectionStrength, distanceSuspicionMultiplyer, sensitivityToMovement); 
     }
 
     public Vector3 directionFromAngle(float angleInDegrees, bool angleIsGlobal)

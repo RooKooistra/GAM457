@@ -1,43 +1,92 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class RoosBetterCharacterController : MonoBehaviour
 {
     CharacterController controller;
-    float xRotation = 0f;
+    [Header("Choose your type of controller")]
+    [Tooltip("First person by default")]
+    public bool isThirdPerson = false;
+    [Tooltip("Main camera transform")]
+    public Transform playerCamera = null;
 
+    [Space(10)]
+    [Header("Third person Variables")]
+    public float speed = 5f;
+    public float turnSmoothTime = 0.1f;
+    float turnSmoothVelocity;
+
+    [Space(10)]
+    [Header("First person Variables")]
     public float jumpHeight = 2f;
     public float walkSpeed = 4f;
-    public float runSpeed = 8f;
-    public float swimSpeed = 3f;
+    public float runSpeed = 8f; 
     public float acceleration = 3f;
     public float mouseSensitivity = 100f;
-    public Transform playerCamera;
-    public Transform floatPoint;
-
-    Vector3 velocity;
-    public bool isGrounded = true;
-    float gravity = -9.81f;
     public float gravityMultiplyer = 1.5f;
+
+    [Space(10)]
+    [Tooltip("The transform that will check to see if it is touching the ground")]
     public Transform groundCheck;
     public float groundCheckTolerance = 0.2f;
+    [Tooltip("Mask layer(s) that character can travel on")]
     public LayerMask groundMask;
+    [Space(10)]
+    [Tooltip("Check this to make character swim when they are in the water. Uncheck to sink")]
+    public bool useSwimming = false;
+    [Tooltip("Drag water gameObject here, player will then swim")]
     public Transform waterLevel = null;
+    [Tooltip("Point of bouyancy of the body")]
+    public Transform floatPoint = null;
+    public float swimSpeed = 3f;
 
-    float currentSpeed = 0f;
-
+    // private variable group
+    float xRotation = 0f;
+    Vector3 velocity; // used for gravity calcs
+    // bool isGrounded = true; moved inside of first person region - left here untill testing successfull;
+    float gravity = -9.81f;
+    float currentSpeed = 0f; //  for lerping
 
     // Start is called before the first frame update
     void Start()
     {
+        if (floatPoint == null) floatPoint = transform;
+        if (playerCamera == null) playerCamera = Camera.main.transform;
+        if (groundCheck == null) groundCheck = transform;
         controller = GetComponent <CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
     void Update()
     {
+        #region Third person logic
+        if (isThirdPerson)
+		{
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
+
+            Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+
+            if (direction.magnitude >= 0.1f)
+            {
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + playerCamera.eulerAngles.y; // get rotation required plus camera angle
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime); // smooth rotation
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+                Vector3 moveDirection = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
+                controller.Move(moveDirection * speed * Time.deltaTime);
+            }
+            return;
+        }
+		#endregion
+
+		#region First person logic
+
+		Cursor.lockState = CursorLockMode.Locked;
+
         float activeGravity = gravity; // set gravity to normal for this frame
 
 
@@ -56,20 +105,24 @@ public class RoosBetterCharacterController : MonoBehaviour
         float z = Input.GetAxis("Vertical");
         float playerSpeed = (Input.GetKey(KeyCode.LeftShift)) ? runSpeed : walkSpeed; // check for run walk
 
-        if(floatPoint.position.y < waterLevel.position.y) // check if player is swimming
+        // if using player swimming, make sure you choose a float point and water object
+		if (useSwimming)
 		{
-            activeGravity = 0f;
-            velocity.y = 0f;
-            playerSpeed = swimSpeed;
-		}
+            if (floatPoint.position.y < waterLevel.position.y)
+            {
+                activeGravity = 0f;
+                velocity.y = 0f;
+                playerSpeed = swimSpeed;
+            }
+        }
 
         currentSpeed = Mathf.Lerp(currentSpeed, playerSpeed, Time.deltaTime * acceleration); // smooth transitions
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * currentSpeed * Time.deltaTime);
 
         // gravity
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckTolerance, groundMask);
-        if(isGrounded && velocity.y < 0f) velocity.y = -1f;
+        bool isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckTolerance, groundMask);
+        if (isGrounded && velocity.y < 0f) velocity.y = 0;
 
         // jump
         if (Input.GetButtonDown("Jump") && isGrounded) velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -77,5 +130,7 @@ public class RoosBetterCharacterController : MonoBehaviour
 
         velocity.y += activeGravity * gravityMultiplyer * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
-    }
+
+		#endregion
+	}
 }
