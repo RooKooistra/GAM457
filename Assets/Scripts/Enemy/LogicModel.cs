@@ -13,18 +13,20 @@ public class LogicModel : MonoBehaviour
 
 	public Text dbText = null; // for better live debugging
 
+	[Tooltip("Cooldown rate for calculating player detection")]
 	[Range(0, 20)] public float cooldownRate = 10f;
-
-	public float monitorTick = 0.3f;
+	[Tooltip("Last known position is forgoten after this many seconds")]
+	public float memoryCooldownSeconds = 30f;
 
 	public bool canSeePlayer = false;
+	public bool canSeeEnergy = false;
 
 	public static event Action Alerted;
 	public static event Action Calm;
 
 	private void Start()
 	{
-		StartCoroutine(SetCalmDelayed(0.1f));
+		StartCoroutine(SetCalmDelayed(0.1f)); // had an error if Calm() was in start
 	}
 
 	/// <summary>
@@ -38,6 +40,28 @@ public class LogicModel : MonoBehaviour
 		Calm();
 	}
 
+	public bool knowEnergyLocation()
+	{
+		return (energyLocations.Count > 0) ? true : false;
+	}
+
+	public bool remembersPlayerLocation()
+	{
+		float memCount = 0;
+		foreach (RememberedPlayer player in rememberedPlayersData)
+		{
+			memCount += player.memoryCooldown;
+		}
+
+		return (memCount == 0) ? false : true;
+	}
+
+	public bool checkNextToEnergy()
+	{
+		return (energyLocations.Count == 0) ? false :
+			(Vector3.Distance(transform.position, GetClosestItem(energyLocations)) < 1f) ? true : false;
+	}
+
 	/// <summary>
 	/// Monitors player list to see if any are visible
 	/// </summary>
@@ -45,29 +69,35 @@ public class LogicModel : MonoBehaviour
 	/// <returns></returns>
 	public void MonitorPlayers()
 	{
-			canSeePlayer = false;
-			if (rememberedPlayersData.Count > 0)
+		canSeePlayer = false;
+
+		if (rememberedPlayersData.Count > 0)
+		{
+			float totalSuspicionCount = 0; // used to calculate calm state
+
+			foreach (RememberedPlayer player in rememberedPlayersData)
 			{
-				float totalSuspicionCount = 0;
+				player.memoryCooldown = ((player.memoryCooldown -= 10 * Time.deltaTime) < 0) ? 0 : player.memoryCooldown -= 10 * Time.deltaTime;
+				if (player.memoryCooldown == 0) player.lastKnownTransform = null;
 
-				foreach (RememberedPlayer playerData in rememberedPlayersData)
+				float suspicion = (player.suspicionScore - cooldownRate * Time.deltaTime > 0f) ? (player.suspicionScore - cooldownRate * Time.deltaTime > 1f) ? 1 : player.suspicionScore - cooldownRate * Time.deltaTime : 0f;
+				player.suspicionScore = suspicion;
+
+				if (suspicion >= 1f)
 				{
-					float suspicion = (playerData.suspicionScore - cooldownRate * Time.deltaTime > 0f) ? (playerData.suspicionScore - cooldownRate * Time.deltaTime > 1f)? 1: playerData.suspicionScore - cooldownRate * Time.deltaTime : 0f;
-					playerData.suspicionScore = suspicion;
-
-					if (suspicion >= 1f)
-					{
-						canSeePlayer = true;
-						Alerted();
-					}
-					totalSuspicionCount += suspicion;
-
-					string sussText = (suspicion > 0) ? (suspicion > 1) ? "SEEN" : Mathf.Round(suspicion * 100).ToString()+"%" : "None";
-				    if(dbText!=null) dbText.text = sussText;
+					player.memoryCooldown = memoryCooldownSeconds;
+					canSeePlayer = true;
+					Alerted();
 				}
 
-				if (totalSuspicionCount == 0) Calm();
+				totalSuspicionCount += suspicion;
+
+				string sussText = (suspicion > 0) ? (suspicion > 1) ? "SEEN" : Mathf.Round(suspicion * 100).ToString() + "%" : "None";
+				if (dbText != null) dbText.text =sussText;
 			}
+
+			if (totalSuspicionCount == 0) Calm();
+		}
 	}
 
 	/// <summary>
@@ -82,6 +112,7 @@ public class LogicModel : MonoBehaviour
 
 	public void ProcessVision(List<GameObject> visibleTargets, float viewRadius, float baseSuspicionAmount, float distanceMultiplyer, float VelocitySensitivity)
 	{
+		canSeeEnergy = false;
 		foreach (GameObject visibleTarget in visibleTargets)
 		{
 			if (visibleTarget.GetComponent<CharacterController>()) // if the target is a player
@@ -106,16 +137,39 @@ public class LogicModel : MonoBehaviour
 
 				if (dbCount == 0)
 				{
-					RememberedPlayer newPlayer = new RememberedPlayer(visibleTarget, thisSuspicionScore, thisLastKnownTransform, thisLastKnownVelocity);
+					RememberedPlayer newPlayer = new RememberedPlayer(visibleTarget, thisSuspicionScore, thisLastKnownTransform, thisLastKnownVelocity, 0f);
 					rememberedPlayersData.Add(newPlayer);
 				}
 			}
 
 			// Ads energy to a known locaiton list. keep getting an error not being able to update the list
-			if (visibleTarget.GetComponent<Energy>() && !energyLocations.Contains(visibleTarget.transform.position)) energyLocations.Add(visibleTarget.transform.position);
+			if (visibleTarget.GetComponent<Energy>())
+			{
+				if(!energyLocations.Contains(visibleTarget.transform.position)) energyLocations.Add(visibleTarget.transform.position);
+				canSeeEnergy = true;
+			}
+		
+			if (visibleTarget.GetComponent<Food>() && !POILocations.Contains(visibleTarget.transform.position)) POILocations.Add(visibleTarget.transform.position);
 
 		}
 
+	}
+
+	public Vector3 GetClosestItem(List<Vector3> list)
+	{
+		float closestItemSoFar = float.MaxValue;
+		Vector3 positionToReturn = Vector3.zero;
+
+		foreach(Vector3 item in list)
+		{
+			float distanceToThisItem = Vector3.Distance(transform.position, item);
+			if(distanceToThisItem < closestItemSoFar)
+			{
+				positionToReturn = item;
+				closestItemSoFar = distanceToThisItem;
+			}
+		}
+		return positionToReturn;
 	}
 
 	/// <summary>

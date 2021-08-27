@@ -5,15 +5,17 @@ using Anthill.AI;
 
 public class CollectEnergyState : AntAIState
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	Health health;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public override void Create(GameObject aGameObject)
+	{
+		base.Create(aGameObject);
+		health = aGameObject.GetComponent<Health>();
+	}
+
+	public override void Enter()
+	{
+		base.Enter();
+		health.healthLevel = health.maxHealth;
+	}
 }

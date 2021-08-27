@@ -4,16 +4,24 @@ using UnityEngine;
 using Anthill.AI;
 
 public class GoToEnergyLocationState : AntAIState
-{ 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+{
+	Movement movement;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public override void Create(GameObject aGameObject)
+	{
+		base.Create(aGameObject);
+		movement = aGameObject.GetComponent<Movement>();
+	}
+
+	public override void Enter()
+	{
+		base.Enter();
+		movement.FindEnergy();
+	}
+
+	public override void Execute(float aDeltaTime, float aTimeScale)
+	{
+		base.Execute(aDeltaTime, aTimeScale);
+		if (movement.agent.remainingDistance < 1f) Finish();
+	}
 }

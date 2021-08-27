@@ -43,3 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fee10bcda91c437489445d02f6b1c0e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  antAiAgent: {fileID: 0}
+  GAMEAREA: {fileID: 0}
