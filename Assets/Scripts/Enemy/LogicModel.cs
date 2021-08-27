@@ -56,10 +56,21 @@ public class LogicModel : MonoBehaviour
 		return (memCount == 0) ? false : true;
 	}
 
+	public Vector3 GetClosestLastPlayerPosition()
+	{
+		List<Vector3> listToProcess = new List<Vector3>();
+		foreach(RememberedPlayer player in rememberedPlayersData)
+		{
+			if (player.memoryCooldown > 0) listToProcess.Add(player.lastKnownTransform.position);
+		}
+
+		return GetClosestPosition(listToProcess);
+	}
+
 	public bool checkNextToEnergy()
 	{
 		return (energyLocations.Count == 0) ? false :
-			(Vector3.Distance(transform.position, GetClosestItem(energyLocations)) < 1f) ? true : false;
+			(Vector3.Distance(transform.position, GetClosestPosition(energyLocations)) < 1f) ? true : false;
 	}
 
 	/// <summary>
@@ -83,7 +94,7 @@ public class LogicModel : MonoBehaviour
 				float suspicion = (player.suspicionScore - cooldownRate * Time.deltaTime > 0f) ? (player.suspicionScore - cooldownRate * Time.deltaTime > 1f) ? 1 : player.suspicionScore - cooldownRate * Time.deltaTime : 0f;
 				player.suspicionScore = suspicion;
 
-				if (suspicion >= 1f)
+				if (suspicion >= 0.99f)
 				{
 					player.memoryCooldown = memoryCooldownSeconds;
 					canSeePlayer = true;
@@ -92,7 +103,7 @@ public class LogicModel : MonoBehaviour
 
 				totalSuspicionCount += suspicion;
 
-				string sussText = (suspicion > 0) ? (suspicion > 1) ? "SEEN" : Mathf.Round(suspicion * 100).ToString() + "%" : "None";
+				string sussText = (suspicion > 0) ? (suspicion > .99) ? "SEEN" : Mathf.Round(suspicion * 100).ToString() + "%" : "None";
 				if (dbText != null) dbText.text =sussText;
 			}
 
@@ -155,7 +166,7 @@ public class LogicModel : MonoBehaviour
 
 	}
 
-	public Vector3 GetClosestItem(List<Vector3> list)
+	public Vector3 GetClosestPosition(List<Vector3> list)
 	{
 		float closestItemSoFar = float.MaxValue;
 		Vector3 positionToReturn = Vector3.zero;

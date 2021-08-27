@@ -5,19 +5,37 @@ using Anthill.AI;
 
 public class ScoutCloseForPlayerState : AntAIState
 {
+	Vision vision;
 	Movement movement;
 
 	public override void Create(GameObject aGameObject)
 	{
 		base.Create(aGameObject);
 		movement = aGameObject.GetComponent<Movement>();
+		vision = aGameObject.GetComponent<Vision>();
 	}
 
 	public override void Enter()
 	{
 		base.Enter();
-		movement.FindPlayer();
+		StartCoroutine(ScoutForPlayer(vision.GetSearchArea()));
+		movement.agent.ResetPath();
 	}
 
+	IEnumerator ScoutForPlayer(List<Vector3> path)
+	{
+		int activeIndex = 0;
+		while (true)
+		{
+			if (Vector3.Distance(transform.position, path[activeIndex]) < 1f || movement.agent.hasPath == false)
+			{
+				movement.agent.destination = path[activeIndex];
+				activeIndex++;
+				if (activeIndex >= path.Count) yield break;
+			}
+
+			yield return null;
+		}
+	}
 
 }

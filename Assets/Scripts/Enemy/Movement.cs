@@ -22,7 +22,7 @@ public class Movement : MonoBehaviour
 
     public void FindEnergy()
 	{
-        Vector3 posToMove = (logicModel.energyLocations.Count > 0) ? logicModel.GetClosestItem(logicModel.energyLocations) : RandomPosition();
+        Vector3 posToMove = (logicModel.energyLocations.Count > 0) ? logicModel.GetClosestPosition(logicModel.energyLocations) : RandomPosition();
         MoveAgent(posToMove);
 	}
 

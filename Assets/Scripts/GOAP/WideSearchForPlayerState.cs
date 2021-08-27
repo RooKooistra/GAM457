@@ -19,4 +19,10 @@ public class WideSearchForPlayerState : AntAIState
 		base.Enter();
 		movement.FindPlayer();
 	}
+
+	public override void Execute(float aDeltaTime, float aTimeScale)
+	{
+		base.Execute(aDeltaTime, aTimeScale);
+		if (movement.agent.remainingDistance < 1f) Finish();
+	}
 }

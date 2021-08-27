@@ -47,7 +47,27 @@ public class Vision : MonoBehaviour
         LogicModel.Alerted -= HandleAlerted;
         LogicModel.Calm -= HandleCalm;
     }
+    public List<Vector3> GetSearchArea()
+    {
+        List<Vector3> listToReturn = new List<Vector3>();
+        listToReturn.Add(logicModel.GetClosestLastPlayerPosition()); // start with last know pos
 
+        Collider[] blockers =  Physics.OverlapSphere(logicModel.GetClosestLastPlayerPosition(), viewRadius, obstacleMask);
+
+        for(int i = 0; i < blockers.Length; i++)
+		{
+            for(int x = -1; x <= 1; x ++)
+			{
+                for (int z = -1; z <= 1; z ++)
+                {
+                    if (x == 0 && z == 0) continue;
+                    listToReturn.Add(new Vector3(blockers[i].transform.position.x + x*2, 0, blockers[i].transform.position.z + z*2));
+                }
+            }
+		}
+
+        return listToReturn;
+    }
 
     /// <summary>
     /// Finds all players inside a view radius and FOV and sends the List to be procesed.
