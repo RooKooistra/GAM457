@@ -11,7 +11,7 @@ public class LogicModel : MonoBehaviour
 	public List<Vector3> energyLocations = new List<Vector3>();
 	public List<Vector3> POILocations = new List<Vector3>();
 
-	public Text dbText; // for better live debugging
+	public Text dbText = null; // for better live debugging
 
 	[Range(0, 20)] public float cooldownRate = 10f;
 
@@ -63,7 +63,7 @@ public class LogicModel : MonoBehaviour
 					totalSuspicionCount += suspicion;
 
 					string sussText = (suspicion > 0) ? (suspicion > 1) ? "SEEN" : Mathf.Round(suspicion * 100).ToString()+"%" : "None";
-					dbText.text = sussText;
+				    if(dbText!=null) dbText.text = sussText;
 				}
 
 				if (totalSuspicionCount == 0) Calm();

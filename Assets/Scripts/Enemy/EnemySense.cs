@@ -6,8 +6,8 @@ using Anthill.Utils;
 
 public class EnemySense : MonoBehaviour, ISense
 {
-	LogicModel logicModel = null;
-	Vision vision = null;
+	LogicModel logicModel;
+	Vision vision;
 
 	private void Awake()
 	{
@@ -23,7 +23,7 @@ public class EnemySense : MonoBehaviour, ISense
 		aWorldState.Set(EnemyScoutVariables.LowEnergy, false);
 		aWorldState.Set(EnemyScoutVariables.CanSeeEnergy, false);
 		aWorldState.Set(EnemyScoutVariables.CanSeePlayer, false);
-		aWorldState.Set(EnemyScoutVariables.KnowPlayersLastPosition, false);
+		aWorldState.Set(EnemyScoutVariables.KnowPlayersLastPosition, true);
 		aWorldState.Set(EnemyScoutVariables.KnowEnergyLocation, false);
 		aWorldState.Set(EnemyScoutVariables.PlayerAlive, true);
 		aWorldState.Set(EnemyScoutVariables.IsJoinedToHost, false);
