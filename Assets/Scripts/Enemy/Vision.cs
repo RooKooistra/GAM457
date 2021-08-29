@@ -38,14 +38,14 @@ public class Vision : MonoBehaviour
 
 	private void Start()
 	{
-        LogicModel.Alerted += HandleAlerted;
-        LogicModel.Calm += HandleCalm;
+        logicModel.Alerted += HandleAlerted;
+        logicModel.Calm += HandleCalm;
     }
 
 	private void OnDestroy()
 	{
-        LogicModel.Alerted -= HandleAlerted;
-        LogicModel.Calm -= HandleCalm;
+        logicModel.Alerted -= HandleAlerted;
+        logicModel.Calm -= HandleCalm;
     }
     public List<Vector3> GetSearchArea()
     {

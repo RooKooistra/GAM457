@@ -21,8 +21,8 @@ public class LogicModel : MonoBehaviour
 	public bool canSeePlayer = false;
 	public bool canSeeEnergy = false;
 
-	public static event Action Alerted;
-	public static event Action Calm;
+	public event Action Alerted;
+	public event Action Calm;
 
 	private void Start()
 	{
@@ -56,15 +56,30 @@ public class LogicModel : MonoBehaviour
 		return (memCount == 0) ? false : true;
 	}
 
+	public Vector3 GetClosestSuspicious(float suspiciousThreshold)
+	{
+		List<Vector3> listToProcess = new List<Vector3>();
+		foreach (RememberedPlayer player in rememberedPlayersData)
+		{
+			if (player.suspicionScore > suspiciousThreshold) listToProcess.Add(player.playerGameobject.transform.position);
+		}
+		Vector3 closestPosition = GetClosestPosition(listToProcess);
+		return (closestPosition == null) ? Vector3.zero : closestPosition;
+	}
+
+	/// <summary>
+	/// gets all players with a suspicion score of over 50% and returns the closest one
+	/// </summary>
+	/// <returns></returns>
 	public Vector3 GetClosestLastPlayerPosition()
 	{
 		List<Vector3> listToProcess = new List<Vector3>();
 		foreach(RememberedPlayer player in rememberedPlayersData)
 		{
-			if (player.memoryCooldown > 0) listToProcess.Add(player.lastKnownTransform.position);
+			if (player.lastKnownTransform != null) listToProcess.Add(player.lastKnownTransform.position);
 		}
-
-		return GetClosestPosition(listToProcess);
+		Vector3 closestPosition = GetClosestPosition(listToProcess);
+		return (closestPosition == null) ? Vector3.zero : closestPosition;
 	}
 
 	public bool checkNextToEnergy()
@@ -98,7 +113,7 @@ public class LogicModel : MonoBehaviour
 				{
 					player.memoryCooldown = memoryCooldownSeconds;
 					canSeePlayer = true;
-					Alerted();
+					Alerted?.Invoke();
 				}
 
 				totalSuspicionCount += suspicion;
@@ -107,7 +122,7 @@ public class LogicModel : MonoBehaviour
 				if (dbText != null) dbText.text =sussText;
 			}
 
-			if (totalSuspicionCount == 0) Calm();
+			if (totalSuspicionCount == 0) Calm?.Invoke();
 		}
 	}
 

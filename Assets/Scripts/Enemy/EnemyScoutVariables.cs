@@ -7,5 +7,6 @@ public enum EnemyScoutVariables
 	KnowEnergyLocation = 4,
 	PlayerAlive = 5,
 	IsJoinedToHost = 6,
-	IsAtEnergyLocation = 7
+	IsAtEnergyLocation = 7,
+	HaveSoundLocation = 8
 }

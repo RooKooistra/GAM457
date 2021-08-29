@@ -18,8 +18,8 @@ public class ScoutCloseForPlayerState : AntAIState
 	public override void Enter()
 	{
 		base.Enter();
-		StartCoroutine(ScoutForPlayer(vision.GetSearchArea()));
 		movement.agent.ResetPath();
+		StartCoroutine(ScoutForPlayer(vision.GetSearchArea()));	
 	}
 
 	IEnumerator ScoutForPlayer(List<Vector3> path)
@@ -31,7 +31,11 @@ public class ScoutCloseForPlayerState : AntAIState
 			{
 				movement.agent.destination = path[activeIndex];
 				activeIndex++;
-				if (activeIndex >= path.Count) yield break;
+				if (activeIndex >= path.Count)
+				{
+					Finish(); // node will run again with the same remembered last player position if memory cooldown has not finished
+					yield break;
+				}
 			}
 
 			yield return null;

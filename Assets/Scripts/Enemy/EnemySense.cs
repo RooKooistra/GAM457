@@ -9,12 +9,14 @@ public class EnemySense : MonoBehaviour, ISense
 	LogicModel logicModel;
 	Vision vision;
 	Health health;
+	Hearing hearing;
 
 	private void Awake()
 	{
 		logicModel = GetComponent<LogicModel>();
 		vision = GetComponent<Vision>();
 		health = GetComponent<Health>();
+		hearing = GetComponent<Hearing>();
 		
 	}
 	public void CollectConditions(AntAIAgent aAgent, AntAICondition aWorldState)
@@ -31,6 +33,7 @@ public class EnemySense : MonoBehaviour, ISense
 		aWorldState.Set(EnemyScoutVariables.PlayerAlive, true);
 		aWorldState.Set(EnemyScoutVariables.IsJoinedToHost, false);
 		aWorldState.Set(EnemyScoutVariables.IsAtEnergyLocation, logicModel.checkNextToEnergy());
+		aWorldState.Set(EnemyScoutVariables.HaveSoundLocation, hearing.hasHearingLocation());
 	}
 
 }

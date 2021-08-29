@@ -30,6 +30,8 @@ MonoBehaviour:
       name: IsJoinedToHost
     - id: 7
       name: IsAtEnergyLocation
+    - id: 8
+      name: HaveSoundLocation
   actions:
   - name: SearchForEnergy
     isDefault: 1
@@ -72,7 +74,7 @@ MonoBehaviour:
   - name: WideSearchForplayer
     isDefault: 0
     state: {fileID: 2000963313269017631, guid: cda4cc310e385a6438409372d72169c0, type: 3}
-    cost: 0
+    cost: 2
     position: {x: 356.99994, y: 303.17648}
     pre:
     - id: 0
@@ -115,7 +117,7 @@ MonoBehaviour:
   - name: ScoutCloseForPlayer
     isDefault: 0
     state: {fileID: 1983354221250362073, guid: ff130741f9d99944986f82cf26ba1ad6, type: 3}
-    cost: 0
+    cost: 2
     position: {x: 557.64703, y: 302.64706}
     pre:
     - id: 0
@@ -144,6 +146,21 @@ MonoBehaviour:
       value: 1
     - id: 7
       value: 1
+  - name: InvestigateSound
+    isDefault: 0
+    state: {fileID: 6668174512173020540, guid: 48cfb8ac61f5dff46a96e057ab7862d1, type: 3}
+    cost: 0
+    position: {x: 241, y: 58}
+    pre:
+    - id: 8
+      value: 1
+    - id: 2
+      value: 0
+    - id: 0
+      value: 0
+    post:
+    - id: 2
+      value: 1
   goals:
   - name: DestroyPlayer
     isDefault: 1
@@ -171,3 +188,5 @@ MonoBehaviour:
       value: 0
     - id: 7
       value: 0
+    - id: 8
+      value: 1

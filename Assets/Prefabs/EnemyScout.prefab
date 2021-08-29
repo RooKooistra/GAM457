@@ -105,6 +105,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3826015065019129651}
+  - component: {fileID: 1285182663}
+  - component: {fileID: 1285182662}
   m_Layer: 0
   m_Name: eyesight
   m_TagString: Untagged
@@ -120,12 +122,90 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3826015065019129650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.66, z: 0.737}
+  m_LocalPosition: {x: -0.00000008940697, y: 0.6600001, z: 0.73699975}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3826015065790574599}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &1285182663
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3826015065019129650}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 0
+  m_Shape: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 4
+  m_Range: 30
+  m_SpotAngle: 115.1
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!114 &1285182662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3826015065019129650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6e704b873a74db4381979c126e80756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  suspiciousThreshold: 0.5
+  turnSmoothTime: 0.15
+  intensityCalm: 2
+  intensityAlerted: 4
 --- !u!1 &3826015065790574622
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,6 +223,10 @@ GameObject:
   - component: {fileID: 3826015065790574621}
   - component: {fileID: 3826015065790574620}
   - component: {fileID: 3826015065790574623}
+  - component: {fileID: 549992873}
+  - component: {fileID: 549992874}
+  - component: {fileID: 549992875}
+  - component: {fileID: 1453830599}
   m_Layer: 0
   m_Name: EnemyScout
   m_TagString: Untagged
@@ -267,9 +351,10 @@ MonoBehaviour:
   energyLocations: []
   POILocations: []
   dbText: {fileID: 0}
-  cooldownRate: 1.17
-  monitorTick: 0.3
+  cooldownRate: 1
+  memoryCooldownSeconds: 45
   canSeePlayer: 0
+  canSeeEnergy: 0
 --- !u!114 &3826015065790574621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,18 +369,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eyesightOrigin: {fileID: 3826015065019129651}
   viewAngle: 110
-  viewRadius: 15
+  viewRadius: 20
   alertedMultiplier: 2
-  multilplier: 1
+  multilplier: 2
   targetMask:
     serializedVersion: 2
     m_Bits: 128
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 91
-  detectionStrength: 8.8
-  sensitivityToMovement: 0.129
-  distanceSuspicionMultiplyer: 5.33
+    m_Bits: 256
+  detectionStrength: 6
+  sensitivityToMovement: 0.15
+  distanceSuspicionMultiplyer: 6
   visibleTargets: []
 --- !u!114 &3826015065790574620
 MonoBehaviour:
@@ -324,3 +409,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fa8363627773684789c8439cf762bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &549992873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3826015065790574622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dba4b208eecbec4c8bd0eb5e903ed54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  lowHealthThreshold: 50
+  healthLossRate: 1
+  healthLevel: 0
+--- !u!114 &549992874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3826015065790574622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5f1701a9f1ab9469c1caf1bb354502, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+--- !u!114 &549992875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3826015065790574622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e3ed7eb95f3d147a17471051cf95cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+--- !u!114 &1453830599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3826015065790574622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1baffece423d7546b636e4df918c07e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hearingDistance: 10
+  soundLocation: {x: 0, y: 0, z: 0}
