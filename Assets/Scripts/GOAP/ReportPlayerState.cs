@@ -22,12 +22,12 @@ public class ReportPlayerState : RooAntAIState
 	{
 		base.Enter();
 		Invoke(nameof(UnlockPause), 0.5f); // was getting error running move agent immediately
-		hearing.soundLocation = Vector3.zero; // was getting an error after the player was seen, would go back to a investigate hearing
 	}
 
 	void UnlockPause()
 	{
 		isPaused = false;
+		hearing.soundLocation = Vector3.zero; // clear search light bug
 	}
 
 	public override void Execute(float aDeltaTime, float aTimeScale)

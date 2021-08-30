@@ -7,18 +7,21 @@ public class ScoutCloseForPlayerState : AntAIState
 {
 	Vision vision;
 	Movement movement;
+	Hearing hearing;
 
 	public override void Create(GameObject aGameObject)
 	{
 		base.Create(aGameObject);
 		movement = aGameObject.GetComponent<Movement>();
 		vision = aGameObject.GetComponent<Vision>();
+		hearing = aGameObject.GetComponent<Hearing>();
 	}
 
 	public override void Enter()
 	{
 		base.Enter();
 		movement.agent.ResetPath();
+		hearing.soundLocation = Vector3.zero; // clearing search light bug
 		StartCoroutine(ScoutForPlayer(vision.GetSearchArea()));	
 	}
 

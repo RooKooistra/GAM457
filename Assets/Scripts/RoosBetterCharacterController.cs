@@ -55,7 +55,8 @@ public class RoosBetterCharacterController : MonoBehaviour
     Vector3 velocity; // used for gravity calcs
     // bool isGrounded = true; moved inside of first person region - left here untill testing successfull;
     float gravity = -9.81f;
-    float currentSpeed = 0f; //  for lerping
+    [HideInInspector]
+    public float currentSpeed = 0f; //  for lerping
 
     public static event Action<Vector3> PlayerMovingSound;
 
@@ -74,7 +75,7 @@ public class RoosBetterCharacterController : MonoBehaviour
 	{
 		while (true)
 		{
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.05f);
             if (isMakingSound) PlayerMovingSound?.Invoke(transform.position);
         }  
 	}

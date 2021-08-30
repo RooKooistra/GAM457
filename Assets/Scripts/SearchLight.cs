@@ -14,12 +14,14 @@ public class SearchLight : MonoBehaviour
     Light searchLight;
     Vision vision;
     LogicModel logicModel;
+    Hearing hearing;
     // Start is called before the first frame update
     private void Start()
     {
         searchLight = GetComponent<Light>();
         vision = GetComponentInParent<Vision>();
         logicModel = GetComponentInParent<LogicModel>();
+        hearing = GetComponentInParent<Hearing>();
 
         searchLight.spotAngle = vision.viewAngle;
 
@@ -46,10 +48,14 @@ public class SearchLight : MonoBehaviour
         searchLight.range = vision.viewRadius * 2;
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Eyesight and light looks forward when player location is unknown. Towards last made sound or
+    /// player position when suspicious or alerted.
+    /// </summary>
     void Update()
     {
-        Vector3 returnedDirection = logicModel.GetClosestSuspicious(suspiciousThreshold);
+        // prioritise last heard location rather than player
+        Vector3 returnedDirection = (hearing.hasHearingLocation())? hearing.soundLocation: logicModel.GetClosestSuspicious(suspiciousThreshold);
         Vector3 direction = (returnedDirection == Vector3.zero) ? transform.parent.forward : returnedDirection - transform.position;
 
         float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg; // get rotation required

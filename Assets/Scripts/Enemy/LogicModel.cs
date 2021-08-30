@@ -24,6 +24,9 @@ public class LogicModel : MonoBehaviour
 	public event Action Alerted;
 	public event Action Calm;
 
+	public static event Action<GameObject> FireGuns;
+	public static event Action StopGuns;
+
 	private void Start()
 	{
 		StartCoroutine(SetCalmDelayed(0.1f)); // had an error if Calm() was in start
@@ -114,6 +117,12 @@ public class LogicModel : MonoBehaviour
 					player.memoryCooldown = memoryCooldownSeconds;
 					canSeePlayer = true;
 					Alerted?.Invoke();
+
+					FireGuns?.Invoke(player.playerGameobject);
+				}
+				else
+				{
+					StopGuns?.Invoke();
 				}
 
 				totalSuspicionCount += suspicion;

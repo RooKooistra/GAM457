@@ -25,6 +25,6 @@ public class Hearing : MonoBehaviour
 
     void HandlePlayerSound(Vector3 soundOrigin)
 	{
-        soundLocation = (Vector3.Distance(transform.position, soundOrigin) <= hearingDistance) ? soundOrigin : Vector3.zero;
+        if (Vector3.Distance(transform.position, soundOrigin) <= hearingDistance) soundLocation = soundOrigin;
 	}
 }

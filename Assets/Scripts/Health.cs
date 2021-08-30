@@ -8,7 +8,7 @@ public class Health : MonoBehaviour
 	public float lowHealthThreshold = 30;
 	public float healthLossRate = 1;
 
-	public float healthLevel; // public for debug
+	public float healthLevel;
 
 	private void Start()
 	{

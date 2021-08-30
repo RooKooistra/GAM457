@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6e704b873a74db4381979c126e80756, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  suspiciousThreshold: 0.5
+  suspiciousThreshold: 0.66
   turnSmoothTime: 0.15
   intensityCalm: 2
   intensityAlerted: 4
@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 1453830599}
   m_Layer: 0
   m_Name: EnemyScout
-  m_TagString: Untagged
+  m_TagString: Scout
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -421,8 +421,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dba4b208eecbec4c8bd0eb5e903ed54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  lowHealthThreshold: 50
+  maxHealth: 60
+  lowHealthThreshold: 30
   healthLossRate: 1
   healthLevel: 0
 --- !u!114 &549992874

@@ -4,15 +4,32 @@ using UnityEngine;
 
 public class Food : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	float cooldownLimit;
+	float cooldown = 0f;
+	bool isEnabled;
+	public Light lighting;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private void Start()
+	{
+		cooldownLimit = Random.Range(30, 60);
+	}
+
+	private void Update()
+	{
+		isEnabled = false;
+		cooldown += Time.deltaTime;
+		if (cooldown > cooldownLimit) isEnabled = true;
+
+		lighting.enabled = isEnabled;
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.GetComponent<RoosBetterCharacterController>() && isEnabled)
+		{
+			other.GetComponent<Health>().healthLevel = other.GetComponent<Health>().maxHealth;
+			cooldownLimit = Random.Range(30, 60);
+			cooldown = 0f;
+		}	
+	}
 }
