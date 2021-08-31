@@ -6,12 +6,12 @@ public class Food : MonoBehaviour
 {
 	float cooldownLimit;
 	float cooldown = 0f;
-	bool isEnabled;
+	bool isEnabled = false;
 	public Light lighting;
 
 	private void Start()
 	{
-		cooldownLimit = Random.Range(30, 60);
+		cooldownLimit = Random.Range(20, 50);
 	}
 
 	private void Update()

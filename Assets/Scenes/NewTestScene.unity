@@ -2931,6 +2931,18 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1418033736, guid: 087b186c8c7dfbe42a91550db8db48ec, type: 3}
+      propertyPath: maxHealth
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418033736, guid: 087b186c8c7dfbe42a91550db8db48ec, type: 3}
+      propertyPath: healthLossRate
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418033736, guid: 087b186c8c7dfbe42a91550db8db48ec, type: 3}
+      propertyPath: lowHealthThreshold
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5250296390957202708, guid: 087b186c8c7dfbe42a91550db8db48ec, type: 3}
       propertyPath: m_TagString
       value: Player
@@ -3379,11 +3391,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 549992873, guid: 718cc8d815b226842ae455be4b99b402, type: 3}
       propertyPath: healthLossRate
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 549992873, guid: 718cc8d815b226842ae455be4b99b402, type: 3}
       propertyPath: lowHealthThreshold
-      value: 15
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1453830599, guid: 718cc8d815b226842ae455be4b99b402, type: 3}
       propertyPath: hearingDistance
@@ -3445,6 +3457,10 @@ PrefabInstance:
       propertyPath: dbText
       value: 
       objectReference: {fileID: 567237387}
+    - target: {fileID: 3826015065790574619, guid: 718cc8d815b226842ae455be4b99b402, type: 3}
+      propertyPath: m_Speed
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3826015065790574622, guid: 718cc8d815b226842ae455be4b99b402, type: 3}
       propertyPath: m_Name
       value: EnemyScout
@@ -4196,6 +4212,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 716007077}
     m_Modifications:
+    - target: {fileID: 2390957639746489145, guid: 8712b0c2ec00cee44af651feb27cde41, type: 3}
+      propertyPath: isEnabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2919578339781156107, guid: 8712b0c2ec00cee44af651feb27cde41, type: 3}
       propertyPath: m_RootOrder
       value: 0

@@ -20,7 +20,7 @@ public class InvestigateSoundState : AntAIState
 	{
 		base.Execute(aDeltaTime, aTimeScale);
 		if (!hearing.hasHearingLocation()) Finish();
-		if (movement.agent.remainingDistance < 1f || !movement.agent.hasPath)
+		if (movement.agent.remainingDistance < 1f)
 		{
 			hearing.soundLocation = Vector3.zero;
 			return;
