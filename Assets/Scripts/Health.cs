@@ -10,8 +10,11 @@ public class Health : MonoBehaviour
 
 	public float healthLevel;
 
+	DebugInfo debugInfo;
+
 	private void Start()
 	{
+		debugInfo = GetComponent<DebugInfo>();
 		healthLevel = maxHealth;
 	}
 
@@ -22,8 +25,13 @@ public class Health : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		healthLevel -= healthLossRate * Time.deltaTime;
+		healthLevel = (healthLevel < 0) ? 0 : healthLevel -= healthLossRate * Time.deltaTime;
+		if(debugInfo!=null) debugInfo.UpdateText(debugInfo.healthText, Mathf.RoundToInt(healthLevel).ToString());
+
+		if (healthLevel == 0) Destroy(gameObject);
 	}
+
+
 
 
 }

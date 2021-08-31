@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Gun : MonoBehaviour
 {
@@ -9,11 +10,13 @@ public class Gun : MonoBehaviour
     public GameObject prefabBullet;
     public float firerate = 0.3f;
     public float bulletForce = 50;
+    public float movementSmoothing = 4;
 
     bool isFiring = false;
     GameObject playerGameObject;
     float firePauseVariable = 0;
-    float turnSmoothVelocity;
+
+    public float leadOffset = 1;
 
 
     // Start is called before the first frame update
@@ -47,12 +50,11 @@ public class Gun : MonoBehaviour
         firePauseVariable += Time.deltaTime;
         if (!isFiring) return;
 
-        Quaternion lookOnLook = 
+        Quaternion lookOnLook =
             Quaternion.LookRotation((playerGameObject.transform.position + 
-            (playerGameObject.transform.forward * 
-            Random.Range(0, playerGameObject.GetComponent<RoosBetterCharacterController>().speed))) - transform.position); // randomise the leading shot
+            (playerGameObject.transform.forward * (playerGameObject.GetComponent<RoosBetterCharacterController>().rbVelocity*1.1f))) - transform.position); // randomise the leading shot
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 5f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * movementSmoothing);
 
         if (firePauseVariable < firerate) return;
 

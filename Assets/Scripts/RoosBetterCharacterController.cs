@@ -58,6 +58,10 @@ public class RoosBetterCharacterController : MonoBehaviour
     [HideInInspector]
     public float currentSpeed = 0f; //  for lerping
 
+    // kinematic rigidbody not giving me a speed to a calculated it manually
+    public float rbVelocity = 0f;
+    Vector3 oldPosition;
+
     public static event Action<Vector3> PlayerMovingSound;
 
     // Start is called before the first frame update
@@ -67,6 +71,7 @@ public class RoosBetterCharacterController : MonoBehaviour
         if (playerCamera == null) playerCamera = Camera.main.transform;
         if (groundCheck == null) groundCheck = transform;
         controller = GetComponent <CharacterController>();
+        oldPosition = transform.position;
 
         StartCoroutine(MakeSound());
     }
@@ -83,8 +88,17 @@ public class RoosBetterCharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        #region Third person logic
-        if (isThirdPerson)
+		#region calc speed
+		Vector3 newPosition = transform.position;
+        float distanceTravelled = (newPosition - oldPosition).magnitude;
+        rbVelocity = distanceTravelled / Time.deltaTime;
+
+        oldPosition = newPosition;
+        newPosition = transform.position;
+		#endregion
+
+		#region Third person logic
+		if (isThirdPerson)
 		{
             float horizontal = Input.GetAxisRaw("Horizontal");
             float vertical = Input.GetAxisRaw("Vertical");

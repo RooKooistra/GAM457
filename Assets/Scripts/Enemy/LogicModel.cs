@@ -24,9 +24,12 @@ public class LogicModel : MonoBehaviour
 	public event Action Alerted;
 	public event Action Calm;
 
+	/// <summary>
+	/// this action will break with more than one enemy calling for guns to fire as one of the enamies will be calling the guns
+	/// to stop. i dont know how to evaluated multiple events called
+	/// </summary>
 	public static event Action<GameObject> FireGuns;
 	public static event Action StopGuns;
-
 	private void Start()
 	{
 		StartCoroutine(SetCalmDelayed(0.1f)); // had an error if Calm() was in start
@@ -128,7 +131,7 @@ public class LogicModel : MonoBehaviour
 				totalSuspicionCount += suspicion;
 
 				string sussText = (suspicion > 0) ? (suspicion > .99) ? "SEEN" : Mathf.Round(suspicion * 100).ToString() + "%" : "None";
-				if (dbText != null) dbText.text =sussText;
+				if(dbText!=null) dbText.text = sussText;
 			}
 
 			if (totalSuspicionCount == 0) Calm?.Invoke();
