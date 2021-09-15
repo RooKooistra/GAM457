@@ -173,13 +173,13 @@ MonoBehaviour:
     isAutoUpdate: 1
     list:
     - id: 0
-      value: 0
+      value: 1
     - id: 1
       value: 0
     - id: 2
       value: 0
     - id: 3
-      value: 0
+      value: 1
     - id: 4
       value: 0
     - id: 5
@@ -189,4 +189,4 @@ MonoBehaviour:
     - id: 7
       value: 0
     - id: 8
-      value: 1
+      value: 0

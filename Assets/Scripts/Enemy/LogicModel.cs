@@ -7,7 +7,10 @@ using UnityEngine.UI;
 
 public class LogicModel : MonoBehaviour
 {
-    List<RememberedPlayer> rememberedPlayersData = new List<RememberedPlayer>();
+	[Header("MUST CHECK THIS WHEN USING BT.. LEAVE UNCHECKED FOR GOAP")]
+	public bool usingBT = false;
+	[Space(5)]
+	List<RememberedPlayer> rememberedPlayersData = new List<RememberedPlayer>();
 	public List<Vector3> energyLocations = new List<Vector3>();
 	public List<Vector3> POILocations = new List<Vector3>();
 
@@ -30,9 +33,11 @@ public class LogicModel : MonoBehaviour
 	/// </summary>
 	public static event Action<GameObject> FireGuns;
 	public static event Action StopGuns;
+
 	private void Start()
 	{
 		StartCoroutine(SetCalmDelayed(0.1f)); // had an error if Calm() was in start
+		StartCoroutine(RunMonitorPlayers());
 	}
 
 	/// <summary>
@@ -44,6 +49,15 @@ public class LogicModel : MonoBehaviour
 	{
 		yield return new WaitForSeconds(delaytime);
 		Calm();
+	}
+
+	IEnumerator RunMonitorPlayers()
+	{
+		while (true)
+		{
+			yield return new WaitForSeconds(0.1f);
+			if(usingBT) MonitorPlayers();
+		}
 	}
 
 	public bool knowEnergyLocation()

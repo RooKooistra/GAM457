@@ -47,7 +47,13 @@ public class Vision : MonoBehaviour
         logicModel.Alerted -= HandleAlerted;
         logicModel.Calm -= HandleCalm;
     }
-    public List<Vector3> GetSearchArea()
+
+	private void FixedUpdate()
+	{
+        if (!logicModel.usingBT) return;
+        FindVisibleTargets();
+	}
+	public List<Vector3> GetSearchArea()
     {
         List<Vector3> listToReturn = new List<Vector3>();
         listToReturn.Add(logicModel.GetClosestLastPlayerPosition()); // start with last know pos
